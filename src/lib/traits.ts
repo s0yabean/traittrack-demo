@@ -1,10 +1,10 @@
-// SYNTHETIC SAMPLE TRAIT MODEL.
-// Made up for this public demo on two plain axes: pace (quick or deliberate) and
-// focus (people or facts). It is not Mindreader's framework and has not been
-// validated against anything. Swap in your own model by editing this file and
-// src/data/questions.ts; the scoring and selection logic does not care.
+// Trait names and one-line summaries follow Mindreader's public four-type model
+// (Knight, Explorer, Healer, Wizard). The do/avoid guidance below is an
+// illustrative sample written for this demo, not Mindreader's training content.
+// Swap in your own model by editing this file and src/data/questions.ts; the
+// scoring and selection logic does not depend on the trait names.
 
-export const TRAIT_IDS = ['Sprinter', 'Spark', 'Anchor', 'Analyst'] as const;
+export const TRAIT_IDS = ['Knight', 'Explorer', 'Healer', 'Wizard'] as const;
 export type TraitId = (typeof TRAIT_IDS)[number];
 
 /** Evidence points per trait. Missing traits count as 0. */
@@ -18,16 +18,14 @@ export interface Guidance {
 export interface TraitInfo {
   id: TraitId;
   summary: string;
-  axes: { pace: 'quick' | 'deliberate'; focus: 'people' | 'facts' };
   doThis: Guidance[];
   avoid: Guidance[];
 }
 
 export const TRAITS: Record<TraitId, TraitInfo> = {
-  Sprinter: {
-    id: 'Sprinter',
-    summary: 'Quick and fact-focused: wants the outcome, the cost and the next step.',
-    axes: { pace: 'quick', focus: 'facts' },
+  Knight: {
+    id: 'Knight',
+    summary: 'Direct decision-makers focused on results and efficiency.',
     doThis: [
       { title: 'Lead with the result', detail: 'Open with what changes for them and by when.' },
       { title: 'Give one clear option', detail: 'Recommend, then offer detail only if asked.' },
@@ -38,10 +36,9 @@ export const TRAITS: Record<TraitId, TraitInfo> = {
       { title: 'Hedging', detail: 'Vague answers read as not knowing.' },
     ],
   },
-  Spark: {
-    id: 'Spark',
-    summary: 'Quick and people-focused: energised by ideas, stories and what is new.',
-    axes: { pace: 'quick', focus: 'people' },
+  Explorer: {
+    id: 'Explorer',
+    summary: 'Innovation-focused risk-takers who value creativity.',
     doThis: [
       { title: 'Tell a short story', detail: 'Show a client like them who got a result.' },
       { title: 'Keep it moving', detail: 'Short sections, visuals, room to react.' },
@@ -52,10 +49,9 @@ export const TRAITS: Record<TraitId, TraitInfo> = {
       { title: 'Closing the door on options', detail: 'Show that there is room to adapt later.' },
     ],
   },
-  Anchor: {
-    id: 'Anchor',
-    summary: 'Deliberate and people-focused: wants trust, steadiness and care for others affected.',
-    axes: { pace: 'deliberate', focus: 'people' },
+  Healer: {
+    id: 'Healer',
+    summary: 'Relationship-focused problem solvers who prioritize harmony.',
     doThis: [
       { title: 'Build the relationship first', detail: 'Ask about their team and who else is involved.' },
       { title: 'Explain the support', detail: 'Who they call, how fast, what happens if it goes wrong.' },
@@ -66,10 +62,9 @@ export const TRAITS: Record<TraitId, TraitInfo> = {
       { title: 'Only numbers', detail: 'Say what it means for the people, too.' },
     ],
   },
-  Analyst: {
-    id: 'Analyst',
-    summary: 'Deliberate and fact-focused: wants evidence, detail and time to check it.',
-    axes: { pace: 'deliberate', focus: 'facts' },
+  Wizard: {
+    id: 'Wizard',
+    summary: 'Analytical and detail-oriented strategic thinkers.',
     doThis: [
       { title: 'Bring the evidence', detail: 'Numbers, sources and how they were measured.' },
       { title: 'Show the trade-offs', detail: 'Say what it does not do as well as what it does.' },

@@ -17,7 +17,7 @@ export interface Advisor {
 
 export const MOCK_PREFIX = '[mock advisor]';
 
-/** Answers from the synthetic trait guidance, so the chat works offline and in tests. */
+/** Answers from the sample do/avoid guidance, so the chat works offline and in tests. */
 export const mockAdvisor: Advisor = {
   name: 'mock',
   async advise({ trait, topic, question }) {

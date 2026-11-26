@@ -39,7 +39,7 @@ export default function App() {
               after every answer.
             </p>
             <p className="text-xs text-amber-700 mt-1">
-              Demo: synthetic sample trait model and questions, not a validated assessment.
+              Demo: trait names follow Mindreader's public four-type model; questions and guidance are illustrative samples, not a validated assessment.
             </p>
           </div>
           <button

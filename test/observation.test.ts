@@ -4,13 +4,13 @@ import { POINTS_PER_KEYWORD, analyzeObservation, tokenize } from '../src/lib/obs
 describe('analyzeObservation', () => {
   it('scores whole-word keyword matches per trait', () => {
     expect(analyzeObservation('Very direct, asked for the numbers and the data')).toEqual({
-      Sprinter: POINTS_PER_KEYWORD,
-      Analyst: 2 * POINTS_PER_KEYWORD,
+      Knight: POINTS_PER_KEYWORD,
+      Wizard: 2 * POINTS_PER_KEYWORD,
     });
   });
 
   it('is case-insensitive', () => {
-    expect(analyzeObservation('WARM and asked about my TEAM')).toEqual({ Anchor: 10 });
+    expect(analyzeObservation('WARM and asked about my TEAM')).toEqual({ Healer: 10 });
   });
 
   it('does not match keywords inside other words', () => {
@@ -19,7 +19,7 @@ describe('analyzeObservation', () => {
   });
 
   it('drops a keyword right after a negation', () => {
-    expect(analyzeObservation('not direct at all, but chatty')).toEqual({ Spark: 5 });
+    expect(analyzeObservation('not direct at all, but chatty')).toEqual({ Explorer: 5 });
     expect(analyzeObservation("wasn't warm")).toEqual({});
   });
 

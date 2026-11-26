@@ -8,10 +8,10 @@ import { TRAIT_IDS, type Impacts, type TraitId } from './traits';
 export const POINTS_PER_KEYWORD = 5;
 
 export const KEYWORDS: Record<TraitId, string[]> = {
-  Sprinter: ['direct', 'decisive', 'brief', 'impatient', 'results', 'deadline', 'busy'],
-  Spark: ['excited', 'chatty', 'story', 'stories', 'ideas', 'enthusiastic', 'spontaneous'],
-  Anchor: ['warm', 'team', 'family', 'trust', 'careful', 'loyal', 'consensus'],
-  Analyst: ['numbers', 'data', 'evidence', 'detail', 'details', 'technical', 'research'],
+  Knight: ['direct', 'decisive', 'brief', 'impatient', 'results', 'deadline', 'busy'],
+  Explorer: ['excited', 'chatty', 'story', 'stories', 'ideas', 'enthusiastic', 'spontaneous'],
+  Healer: ['warm', 'team', 'family', 'trust', 'careful', 'loyal', 'consensus'],
+  Wizard: ['numbers', 'data', 'evidence', 'detail', 'details', 'technical', 'research'],
 };
 
 const NEGATIONS = new Set(['not', 'never', 'no', "isn't", "wasn't", 'hardly']);

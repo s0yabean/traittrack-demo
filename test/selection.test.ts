@@ -13,33 +13,33 @@ const q = (id: string, tag: string, options: Question['options']): Question => (
 
 // A tiny bank where each question is good at telling apart one pair of traits.
 const BANK: Question[] = [
-  q('weak', 'A', [{ text: 'x', impacts: { Sprinter: 1, Spark: 1, Anchor: 1, Analyst: 1 } }]),
-  q('spark-vs-anchor', 'A', [
-    { text: 'spark', impacts: { Spark: 10 } },
-    { text: 'anchor', impacts: { Anchor: 10 } },
+  q('weak', 'A', [{ text: 'x', impacts: { Knight: 1, Explorer: 1, Healer: 1, Wizard: 1 } }]),
+  q('explorer-vs-healer', 'A', [
+    { text: 'explorer', impacts: { Explorer: 10 } },
+    { text: 'healer', impacts: { Healer: 10 } },
   ]),
-  q('sprinter-vs-analyst', 'B', [
-    { text: 'sprinter', impacts: { Sprinter: 10 } },
-    { text: 'analyst', impacts: { Analyst: 10 } },
+  q('knight-vs-wizard', 'B', [
+    { text: 'knight', impacts: { Knight: 10 } },
+    { text: 'wizard', impacts: { Wizard: 10 } },
   ]),
   q('broad', 'B', [
-    { text: 'a', impacts: { Sprinter: 12 } },
-    { text: 'b', impacts: { Spark: 12 } },
-    { text: 'c', impacts: { Anchor: 12 } },
-    { text: 'd', impacts: { Analyst: 12 } },
+    { text: 'a', impacts: { Knight: 12 } },
+    { text: 'b', impacts: { Explorer: 12 } },
+    { text: 'c', impacts: { Healer: 12 } },
+    { text: 'd', impacts: { Wizard: 12 } },
   ]),
 ];
 
 describe('separation and spread', () => {
   it('is zero when no option tells the two traits apart', () => {
-    expect(separation(BANK[0], 'Spark', 'Anchor')).toBe(0);
+    expect(separation(BANK[0], 'Explorer', 'Healer')).toBe(0);
     expect(spread(BANK[0])).toBe(0);
   });
 
   it('is highest for the pair a question was written for', () => {
     const sa = BANK[1];
-    expect(separation(sa, 'Spark', 'Anchor')).toBe(10);
-    expect(separation(sa, 'Sprinter', 'Analyst')).toBe(0);
+    expect(separation(sa, 'Explorer', 'Healer')).toBe(10);
+    expect(separation(sa, 'Knight', 'Wizard')).toBe(0);
   });
 });
 
@@ -49,21 +49,21 @@ describe('nextQuestion', () => {
   });
 
   it('targets the current top two traits once there is evidence', () => {
-    const sparkAnchor = applyImpacts(emptyProfile(), { Spark: 10, Anchor: 8 });
-    expect(nextQuestion(BANK, sparkAnchor)?.id).toBe('spark-vs-anchor');
+    const explorerHealer = applyImpacts(emptyProfile(), { Explorer: 10, Healer: 8 });
+    expect(nextQuestion(BANK, explorerHealer)?.id).toBe('explorer-vs-healer');
 
-    const sprinterAnalyst = applyImpacts(emptyProfile(), { Sprinter: 10, Analyst: 8 });
-    expect(nextQuestion(BANK, sprinterAnalyst)?.id).toBe('sprinter-vs-analyst');
+    const knightWizard = applyImpacts(emptyProfile(), { Knight: 10, Wizard: 8 });
+    expect(nextQuestion(BANK, knightWizard)?.id).toBe('knight-vs-wizard');
   });
 
   it('never repeats an answered question', () => {
-    const p = applyImpacts(emptyProfile(), { Spark: 10, Anchor: 8 });
-    const next = nextQuestion(BANK, p, { answered: ['spark-vs-anchor'] });
-    expect(next?.id).not.toBe('spark-vs-anchor');
+    const p = applyImpacts(emptyProfile(), { Explorer: 10, Healer: 8 });
+    const next = nextQuestion(BANK, p, { answered: ['explorer-vs-healer'] });
+    expect(next?.id).not.toBe('explorer-vs-healer');
   });
 
   it('respects the tag filter', () => {
-    const p = applyImpacts(emptyProfile(), { Spark: 10, Anchor: 8 });
+    const p = applyImpacts(emptyProfile(), { Explorer: 10, Healer: 8 });
     expect(nextQuestion(BANK, p, { tag: 'B' })?.tag).toBe('B');
     expect(nextQuestion(BANK, p, { tag: 'missing' })).toBeNull();
   });

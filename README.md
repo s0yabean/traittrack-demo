@@ -4,7 +4,7 @@
 
 A live quiz a salesperson fills in during a client meeting: each answer or note updates a running estimate of the client's communication style, picks the next most useful question, and shows what to do and what to avoid.
 
-Built in 2024 while CTO of Mindreader, as a prototype of a live-quiz input for Mindreader's sales tools. **This public version uses a synthetic, made-up trait model and question bank**, not Mindreader's framework; see [Synthetic model](#synthetic-model).
+Built in 2024 while CTO of Mindreader. The trait names follow Mindreader's public four-type model; the questions and guidance in this repo are illustrative samples written for the demo (see [Trait model](#trait-model)).
 
 ![Live profile after five observations](docs/screenshots/01-live-profile.png)
 
@@ -36,21 +36,21 @@ All of the logic is plain TypeScript in `src/lib/`, with no React in it, so it c
 - **Scoring (`scoring.ts`).** The profile keeps raw evidence points per trait, starting from a small prior so one answer can't swing a fresh profile to 100%. Percentages are computed from the points on display, with largest-remainder rounding so they always sum to 100. Because nothing is normalised in place, the order of answers doesn't change the result.
 - **Confidence.** `none` until there is evidence; `low` whenever the top two traits are within 8 percentage points of each other; `high` only with a clear lead *and* at least five observations. The UI says "close call" and asks for another question rather than hiding the uncertainty.
 - **Question selection (`selection.ts`).** With no evidence yet, the next question is the one whose options spread all traits furthest apart. After that, it is the unanswered question whose options best separate the current top two traits (mean absolute gap in points between them). Each tap goes where the profile is least sure. The salesperson can also browse by tag (Opening, Pace, Objections...) when the conversation turns to a topic.
-- **Free-text notes (`observation.ts`).** Keyword matching on whole words, with a negation word right before a keyword ("not direct") cancelling it. Simple on purpose: it shows its work ("Added: Sprinter +5, Analyst +5"), and an LLM or trained classifier can replace it behind the same function signature.
+- **Free-text notes (`observation.ts`).** Keyword matching on whole words, with a negation word right before a keyword ("not direct") cancelling it. Simple on purpose: it shows its work ("Added: Knight +5, Wizard +5"), and an LLM or trained classifier can replace it behind the same function signature.
 - **Follow-up chat (`advisor.ts`).** An `Advisor` interface with one implementation, a mock that answers from the trait guidance. No network, no key.
 
-## Synthetic model
+## Trait model
 
-Mindreader's method is HIS, Mindreader's Human Intelligence System, a four-type temperament model. Its question bank and guidance are Mindreader's content, so they are **not** in this repo. In their place is a sample model made up for this demo on two plain axes, pace (quick or deliberate) and focus (people or facts):
+Mindreader's method is HIS, Mindreader's Human Intelligence System. Its public four-type model, adapted from David Keirsey's temperament model, gives the trait names used here:
 
-| Trait | Pace | Focus | In short |
-|---|---|---|---|
-| Sprinter | quick | facts | wants the outcome, the cost and the next step |
-| Spark | quick | people | energised by ideas, stories and what is new |
-| Anchor | deliberate | people | wants trust, steadiness and care for others affected |
-| Analyst | deliberate | facts | wants evidence, detail and time to check it |
+| Trait | In short |
+|---|---|
+| Knight | Direct decision-makers focused on results and efficiency |
+| Explorer | Innovation-focused risk-takers who value creativity |
+| Healer | Relationship-focused problem solvers who prioritize harmony |
+| Wizard | Analytical and detail-oriented strategic thinkers |
 
-The ten questions in `src/data/questions.ts` and the do/avoid guidance in `src/lib/traits.ts` were written for this demo. None of it has been validated. To use your own model, edit those two files; the scoring and selection code does not depend on the trait names.
+The ten questions in `src/data/questions.ts` and the do/avoid guidance in `src/lib/traits.ts` are illustrative samples written for this demo, not Mindreader's question bank or training content, and they have not been validated. To use your own model, edit those two files; the scoring and selection code does not depend on the trait names.
 
 ## Results
 
@@ -81,12 +81,12 @@ npm run build
 ```
 src/
   lib/
-    traits.ts         SYNTHETIC 4-trait sample model and do/avoid guidance
+    traits.ts         the four types (public names) + sample do/avoid guidance
     scoring.ts        profile, percentages, ranking, confidence
     selection.ts      next-question picker (separation of the top two traits)
     observation.ts    keyword scoring for free-text notes
     advisor.ts        Advisor interface + offline mock
-  data/questions.ts   SYNTHETIC 10-question bank
+  data/questions.ts   illustrative 10-question sample bank
   components/         QuestionPanel, ObservationInput, TraitScores, GuidancePanel, ChatModal
   App.tsx             state: one profile + answered question ids
 test/                 vitest: scoring, selection, notes, mock advisor
@@ -97,7 +97,7 @@ docs/screenshots/     README images
 ## Design decisions and what I'd do next
 
 - **What changed from the 2024 prototype.** The prototype stored percentages and re-normalised them after every answer, so rounding drifted and the result depended on answer order; it also sorted React state in place during render. The questions were fixed per tag, the free-text box matched substrings, and the chat reply was a hard-coded string. This version moves the logic into tested pure functions, stores raw points, adds the confidence rule and the adaptive next question, and puts the chat behind an interface.
-- **Observations are not independent.** Two questions about pace both count fully, so a client who is simply in a hurry today scores as a Sprinter twice. A real version should weight questions by how much they overlap, or fit the weights from labelled meetings.
+- **Observations are not independent.** Two questions about pace both count fully, so a client who is simply in a hurry today scores as a Knight twice. A real version should weight questions by how much they overlap, or fit the weights from labelled meetings.
 - **The points are hand-set.** Each option's points are a judgement call. With labelled data, they should be learned (for example a simple logistic model per trait), and the confidence thresholds should be calibrated against outcomes rather than picked.
 - **One session, in memory.** No accounts, no saved clients, no CRM sync. "New client" resets everything.
 - **What I'd do next:** combine this quiz with other evidence (notes, prior meetings) into the same running estimate, and log which suggested questions the salesperson skips, since a question nobody can answer mid-meeting is a bad question however well it separates traits on paper.
