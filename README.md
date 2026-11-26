@@ -2,15 +2,15 @@
 
 [![CI](https://github.com/s0yabean/traittrack/actions/workflows/ci.yml/badge.svg)](https://github.com/s0yabean/traittrack/actions/workflows/ci.yml)
 
-A live quiz a salesperson fills in during a client meeting: each answer or note updates a running estimate of the client's communication style, picks the next most useful question, and shows what to do and what to avoid.
+A demo I built during my Mindreader days, as CTO: a live, real-time test that helps a salesperson profile a client quickly when they have no information before the sale, like a cold Zoom meeting. Each answer or note updates a running estimate of the client's communication style, picks the next most useful question, and shows what to do and what to avoid.
 
-Built in 2024 while CTO of Mindreader. The trait names follow Mindreader's public four-type model; the questions and guidance in this repo are illustrative samples written for the demo (see [Trait model](#trait-model)).
+The trait names follow Mindreader's public four-type model; the questions and guidance in this repo are illustrative samples written for the demo (see [Trait model](#trait-model)).
 
 ![Live profile after five observations](docs/screenshots/01-live-profile.png)
 
 ## The problem
 
-A relationship manager often meets a client with nothing to go on: no writing to analyse, no prior notes. What they do have is the meeting itself: how the client opens, what they ask, how they talk about risk. That evidence is lost if it has to be written up afterwards, and a long questionnaire can't be filled in while someone is talking to you.
+A salesperson joins a cold Zoom meeting with a prospect they know nothing about: no referral, no notes, no posts or writing to analyse beforehand. Within the first few minutes they have to decide how to pitch: lead with numbers or with a story, push for a decision or give time. The only evidence is the meeting itself: how the client opens, what they ask, how they talk about risk. That evidence is lost if it has to be written up afterwards, and a long questionnaire can't be filled in while someone is talking to you.
 
 So the input has to be fast (one tap per observation), the estimate has to update as the meeting goes, and the tool has to say how sure it is, so a close call between two styles doesn't get presented as a confident read.
 
@@ -54,7 +54,7 @@ The ten questions in `src/data/questions.ts` and the do/avoid guidance in `src/l
 
 ## Results
 
-This repo is a prototype, not a measured deployment, so it has no results of its own. Mindreader's published numbers, including the independent test of its face model against third-party personality tests, are on the [Mindreader work page](https://tonytonggg.com/work/mindreader). The "never confident on a close call" rule here is the same principle described there.
+This repo is a demo, not a measured deployment, so it has no results of its own. Mindreader's published numbers, including the independent test of its face model against third-party personality tests, are on the [Mindreader work page](https://tonytonggg.com/work/mindreader). The "never confident on a close call" rule here is the same principle described there.
 
 ## Quickstart
 
@@ -96,7 +96,7 @@ docs/screenshots/     README images
 
 ## Design decisions and what I'd do next
 
-- **What changed from the 2024 prototype.** The prototype stored percentages and re-normalised them after every answer, so rounding drifted and the result depended on answer order; it also sorted React state in place during render. The questions were fixed per tag, the free-text box matched substrings, and the chat reply was a hard-coded string. This version moves the logic into tested pure functions, stores raw points, adds the confidence rule and the adaptive next question, and puts the chat behind an interface.
+- **What changed from the original demo.** The original stored percentages and re-normalised them after every answer, so rounding drifted and the result depended on answer order; it also sorted React state in place during render. The questions were fixed per tag, the free-text box matched substrings, and the chat reply was a hard-coded string. This version moves the logic into tested pure functions, stores raw points, adds the confidence rule and the adaptive next question, and puts the chat behind an interface.
 - **Observations are not independent.** Two questions about pace both count fully, so a client who is simply in a hurry today scores as a Knight twice. A real version should weight questions by how much they overlap, or fit the weights from labelled meetings.
 - **The points are hand-set.** Each option's points are a judgement call. With labelled data, they should be learned (for example a simple logistic model per trait), and the confidence thresholds should be calibrated against outcomes rather than picked.
 - **One session, in memory.** No accounts, no saved clients, no CRM sync. "New client" resets everything.
