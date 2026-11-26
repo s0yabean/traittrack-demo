@@ -1,6 +1,6 @@
 # traittrack
 
-[![CI](https://github.com/s0yabean/traittrack/actions/workflows/ci.yml/badge.svg)](https://github.com/s0yabean/traittrack/actions/workflows/ci.yml)
+[![CI](https://github.com/s0yabean/traittrack-demo/actions/workflows/ci.yml/badge.svg)](https://github.com/s0yabean/traittrack-demo/actions/workflows/ci.yml)
 
 A demo I built during my Mindreader days, as CTO: a live, real-time test that helps a salesperson profile a client quickly when they have no information before the sale, like a cold Zoom meeting. Each answer or note updates a running estimate of the client's communication style, picks the next most useful question, and shows what to do and what to avoid.
 
